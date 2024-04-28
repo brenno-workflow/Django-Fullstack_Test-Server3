@@ -16,6 +16,9 @@ from pathlib import Path
 from dotenv import load_dotenv
 import os
 
+# Configurar url post db
+import dj_database_url
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -102,6 +105,10 @@ DATABASES = {
     }
 }
 
+DATABASES['default'] = dj_database_url.parse("postgres://django_postgresql_evcx_user:Z39IoERquYBYndb3GEblSndv01sOakJq@dpg-com1o221hbls73998950-a.oregon-postgres.render.com/django_postgresql_evcx")
+
+# postgres://django_postgresql_evcx_user:Z39IoERquYBYndb3GEblSndv01sOakJq@dpg-com1o221hbls73998950-a/django_postgresql_evcx
+# postgres://django_postgresql_evcx_user:Z39IoERquYBYndb3GEblSndv01sOakJq@dpg-com1o221hbls73998950-a.oregon-postgres.render.com/django_postgresql_evcx
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
