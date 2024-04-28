@@ -1,0 +1,27 @@
+# Arquivo .env
+
+# Configurações do Django
+DEBUG=True
+SECRET_KEY="django-insecure-4p+tx-#t$b&l+dvjv*o-u6v89v^s)wi^8(-p(%c@c8#)n1m%h5"
+
+# Configurações do Banco de Dados
+DATABASE_ENGINE="django.db.backends.mysql"
+DATABASE_NAME="if0_36438673_curriculum42_db"
+DATABASE_USER="ozhLQnUe8h29O00"
+DATABASE_PASSWORD="curriculum42"
+DATABASE_HOST="sql300.infinityfree.com"
+DATABASE_PORT="3306"
+
+# Configurações do Banco de Dados
+DATABASE_ENGINE="django.db.backends.mysql"
+DATABASE_NAME="curriculum42_db"
+DATABASE_USER="root"
+DATABASE_PASSWORD=""
+DATABASE_HOST="localhost"
+DATABASE_PORT="3306"
+
+# Configurações de Email
+EMAIL_HOST=seu_host_de_email
+EMAIL_PORT=porta_do_email
+EMAIL_HOST_USER=seu_usuario_de_email
+EMAIL_HOST_PASSWORD=sua_senha_de_email
