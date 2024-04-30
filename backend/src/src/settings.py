@@ -105,7 +105,7 @@ DATABASES = {
 }
 
 database_url = os.getenv("DATABASE_URL")
-DATABASES['default'] = dj_database_url.parse("postgres://django_postgresql_evcx_user:Z39IoERquYBYndb3GEblSndv01sOakJq@dpg-com1o221hbls73998950-a.oregon-postgres.render.com/django_postgresql_evcx")
+DATABASES['default'] = dj_database_url.parse(database_url)
 
 # postgres://django_postgresql_evcx_user:Z39IoERquYBYndb3GEblSndv01sOakJq@dpg-com1o221hbls73998950-a/django_postgresql_evcx
 # postgres://django_postgresql_evcx_user:Z39IoERquYBYndb3GEblSndv01sOakJq@dpg-com1o221hbls73998950-a.oregon-postgres.render.com/django_postgresql_evcx
