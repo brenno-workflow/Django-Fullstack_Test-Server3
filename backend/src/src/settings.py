@@ -34,7 +34,11 @@ SECRET_KEY = os.getenv("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv("DEBUG", "False").lower() == "true"
 
-ALLOWED_HOSTS = [os.getenv("ALLOWED_HOSTS").split(",")]
+#ALLOWED_HOSTS = [os.getenv("ALLOWED_HOSTS").split(",")]
+ALLOWED_HOSTS = [
+    'localhost',
+    'django-test-server3.onrender.com',
+]
 
 # Application definition
 
