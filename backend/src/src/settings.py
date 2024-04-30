@@ -167,3 +167,5 @@ REST_FRAMEWORK = {
     ),
     # Outras configurações REST_FRAMEWORK, se houver
 }
+
+CORS_ORIGIN_ALLOW_ALL = True
