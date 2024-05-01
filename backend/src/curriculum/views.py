@@ -78,7 +78,7 @@ def create(request):
 
 @csrf_exempt
 def update(request):
-    if request.method == 'POST':
+    if request.method == 'PUT':
         try:
             data = json.loads(request.body.decode('utf-8'))
             print(f'data: {data}')
@@ -238,7 +238,7 @@ def update(request):
 
 @csrf_exempt
 def delete(request):
-    if request.method == 'POST':
+    if request.method == 'DELETE':
         try:
             data = json.loads(request.body.decode('utf-8'))
             credential_id = data.get('id')
@@ -268,49 +268,53 @@ def delete(request):
 
 @csrf_exempt
 def list(request):
-    try:
+    if request.method == 'GET':
 
-        data = json.loads(request.body.decode('utf-8'))
-        credential_id = data.get('id')
-        
-        # Consulta todos os usuários (currículos)
-        users = User.objects.all()
+        try:        
 
-        # Lista para armazenar os currículos formatados
-        cvs = []
-        my_cvs = []
+            data = json.loads(request.body.decode('utf-8'))
+            credential_id = data.get('id')
+            
+            # Consulta todos os usuários (currículos)
+            users = User.objects.all()
 
-        # Itera sobre os usuários e formata os dados
-        for user in users:
-            cv_data = {
-                "name": user.name,
-                "title": user.title,
-                "id": str(user.pk),  # Chave do currículo é o ID do usuário
-                "key": str(user.key)
+            # Lista para armazenar os currículos formatados
+            cvs = []
+            my_cvs = []
+
+            # Itera sobre os usuários e formata os dados
+            for user in users:
+                cv_data = {
+                    "name": user.name,
+                    "title": user.title,
+                    "id": str(user.pk),  # Chave do currículo é o ID do usuário
+                    "key": str(user.key)
+                }
+
+                # Verifica se o usuário tem uma chave estrangeira específica
+                if user.credential_id == credential_id:
+                    my_cvs.append(cv_data)
+                else:
+                    cvs.append(cv_data)
+
+            # Cria o objeto de resposta com os currículos formatados
+            response_data = {
+                "cvs": cvs,
+                "myCvs": my_cvs
             }
 
-            # Verifica se o usuário tem uma chave estrangeira específica
-            if user.credential_id == credential_id:
-                my_cvs.append(cv_data)
-            else:
-                cvs.append(cv_data)
+            # Retorna a resposta como JSON
+            return JsonResponse(response_data)
 
-        # Cria o objeto de resposta com os currículos formatados
-        response_data = {
-            "cvs": cvs,
-            "myCvs": my_cvs
-        }
-
-        # Retorna a resposta como JSON
-        return JsonResponse(response_data)
-
-    except Exception as e:
-        # Em caso de qualquer exceção, retorne uma resposta de erro
-        return JsonResponse({'error': str(e)}, status=500)
+        except Exception as e:
+            # Em caso de qualquer exceção, retorne uma resposta de erro
+            return JsonResponse({'error': str(e)}, status=500)
+        
+    return JsonResponse({'error': 'Lista não disponivel'}, status=405)
 
 @csrf_exempt
 def accessLevel(request):
-    if request.method == 'POST':
+    if request.method == 'PUT':
         try:
             data = json.loads(request.body.decode('utf-8'))
             credential_id = data.get('id')
@@ -333,7 +337,7 @@ def accessLevel(request):
 
 @csrf_exempt
 def published(request):
-    if request.method == 'POST':
+    if request.method == 'PUT':
         try:
             data = json.loads(request.body.decode('utf-8'))
             credential_id = data.get('id')
@@ -356,85 +360,91 @@ def published(request):
 def profile(request):
     if request.method == 'GET':
 
-        data = json.loads(request.body.decode('utf-8'))
-        credential_id = data.get('id')
+        try:
+            data = json.loads(request.body.decode('utf-8'))
+            credential_id = data.get('id')
 
-        # Obtenha o usuário existente
-        user = User.objects.get(credential_id=credential_id)
-        user_data = {
-            "name": user.name,
-            "title": user.title,
-            "email": user.email,
-            "phone": user.phone,
-            "location": user.location,
-            "avatar": user.avatar,
-            "gender": user.gender,
-            "pronoun": user.pronoun,
-            "description": user.description,
-            "accessLevel": user.access_level,
-            "published": user.published,
-            "created_at": user.created_at,
-            "updated_at": user.updated_at,
-            "key": user.key,
-            "id": user.id
-        }
+            # Obtenha o usuário existente
+            user = User.objects.get(credential_id=credential_id)
+            user_data = {
+                "name": user.name,
+                "title": user.title,
+                "email": user.email,
+                "phone": user.phone,
+                "location": user.location,
+                "avatar": user.avatar,
+                "gender": user.gender,
+                "pronoun": user.pronoun,
+                "description": user.description,
+                "accessLevel": user.access_level,
+                "published": user.published,
+                "created_at": user.created_at,
+                "updated_at": user.updated_at,
+                "key": user.key,
+                "id": user.id
+            }
 
-        links = Link.objects.filter(user=user)
-        links_data = [{"name": link.name, "url": link.url} for link in links]
+            links = Link.objects.filter(user=user)
+            links_data = [{"name": link.name, "url": link.url} for link in links]
 
-        experiences = Experience.objects.filter(user=user)
-        experiences_data = [{
-            "company": experience.company,
-            "position": experience.position,
-            "period": experience.period,
-            "description": experience.description
-        } for experience in experiences]
+            experiences = Experience.objects.filter(user=user)
+            experiences_data = [{
+                "company": experience.company,
+                "position": experience.position,
+                "period": experience.period,
+                "description": experience.description
+            } for experience in experiences]
 
-        educations = Education.objects.filter(user=user)
-        educations_data = [{
-            "institution": education.institution,
-            "course": education.course,
-            "period": education.period,
-            "description": education.description
-        } for education in educations]
+            educations = Education.objects.filter(user=user)
+            educations_data = [{
+                "institution": education.institution,
+                "course": education.course,
+                "period": education.period,
+                "description": education.description
+            } for education in educations]
 
-        skills = Skill.objects.filter(user=user)
-        skills_data = [skill.name for skill in skills]
+            skills = Skill.objects.filter(user=user)
+            skills_data = [skill.name for skill in skills]
 
-        custom_data = []
-        graphics = Graphic.objects.filter(user=user)
-        for graphic in graphics:
-            custom_data.append({
-                "title": graphic.title,
-                "description": graphic.description,
-                "topicType": {
-                    "type": graphic.type,
+            custom_data = []
+            graphics = Graphic.objects.filter(user=user)
+            for graphic in graphics:
+                custom_data.append({
+                    "title": graphic.title,
                     "description": graphic.description,
-                    "percentage": graphic.percentage,
-                    "color": graphic.color
-                }
-            })
+                    "topicType": {
+                        "type": graphic.type,
+                        "description": graphic.description,
+                        "percentage": graphic.percentage,
+                        "color": graphic.color
+                    }
+                })
 
-        topics = Topic.objects.filter(user=user)
-        for topic in topics:
-            custom_data.append({
-                "title": topic.title,
-                "description": topic.description,
-                "topicType": {
-                    "type": topic.type,
-                    "topics": topic.topics
-                }
-            })
+            topics = Topic.objects.filter(user=user)
+            for topic in topics:
+                custom_data.append({
+                    "title": topic.title,
+                    "description": topic.description,
+                    "topicType": {
+                        "type": topic.type,
+                        "topics": topic.topics
+                    }
+                })
 
-        response_data = {
-            "user": user_data,
-            "links": links_data,
-            "experience": experiences_data,
-            "education": educations_data,
-            "skills": skills_data,
-            "Custom": custom_data
-        }
+            response_data = {
+                "user": user_data,
+                "links": links_data,
+                "experience": experiences_data,
+                "education": educations_data,
+                "skills": skills_data,
+                "Custom": custom_data
+            }
 
-        return JsonResponse(response_data)
+            return JsonResponse(response_data)
+        except User.DoesNotExist:
+            return JsonResponse({"error": "Only POST requests are allowed."}, status=404)
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=500)
+    
     else:
-        return JsonResponse({"error": "Only POST requests are allowed."})
+        return JsonResponse({'error': 'Perfil não existe.'}, status=405)
