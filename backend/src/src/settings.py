@@ -168,4 +168,9 @@ REST_FRAMEWORK = {
     # Outras configurações REST_FRAMEWORK, se houver
 }
 
+CORS_ORIGIN_WHITELIST = [
+    'http://localhost:3000',  # Seu frontend em localhost
+    'https://django-test-server3.onrender.com',  # Seu frontend em Render
+]
+
 CORS_ORIGIN_ALLOW_ALL = False
