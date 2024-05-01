@@ -25,6 +25,7 @@ def signup(request):
         data = json.loads(request.body)
 
         # Verificar se os campos de email e senha estão presentes
+        name = data.get('name')
         email = data.get('email')
         password = data.get('password')
 
