@@ -267,13 +267,13 @@ def delete(request):
     return JsonResponse({'error': 'Método não permitido'}, status=405)
 
 @csrf_exempt
-def list(request, id):
-
+def list(request):
     if request.method == 'GET':
 
-        try:
-            # Obtém o usuário existente pelo ID fornecido na URL
-            credential_id = id
+        try:        
+
+            data = json.loads(request.body.decode('utf-8'))
+            credential_id = data.get('id')
             
             # Consulta todos os usuários (currículos)
             users = User.objects.all()
@@ -290,6 +290,8 @@ def list(request, id):
                     "id": str(user.pk),  # Chave do currículo é o ID do usuário
                     "key": str(user.key)
                 }
+
+                print('-------- TESTE -----------')
 
                 # Verifica se o usuário tem uma chave estrangeira específica
                 if user.credential_id == credential_id:
@@ -357,12 +359,12 @@ def published(request):
         return JsonResponse({'error': 'Metodo não permitido'}, status=405)
     
 @csrf_exempt
-def profile(request, id):
+def profile(request):
     if request.method == 'GET':
 
         try:
-            # Obtém o usuário existente pelo ID fornecido na URL
-            credential_id = id
+            data = json.loads(request.body.decode('utf-8'))
+            credential_id = data.get('id')
 
             # Obtenha o usuário existente
             user = User.objects.get(credential_id=credential_id)

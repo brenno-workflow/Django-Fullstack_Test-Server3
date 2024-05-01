@@ -6,9 +6,9 @@ urlpatterns = [
     path('create', views.create, name='create'),
     path('update', views.update, name='update'),
     path('delete', views.delete, name='delete'),
-    path('list', views.list, name='list'),
+    path('list/<int:id>', views.list, name='list'),
     path('accessLevel', views.accessLevel, name='accessLevel'),
     path('published', views.published, name='published'),
-    path('profile', views.profile, name='profile')
+    path('profile/<int:id>', views.profile, name='profile')
 ]
 
