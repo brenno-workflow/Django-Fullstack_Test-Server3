@@ -53,7 +53,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     # Adicionar os novos aplicativos
-    'login',
     'account',
     'home',
     'curriculum',

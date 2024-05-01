@@ -5,6 +5,7 @@ from account.models import Credential
 from .models import User, Link, Experience, Education, Skill, Graphic, Topic
 from django.core import serializers
 from django.shortcuts import get_object_or_404
+from django.utils.crypto import get_random_string
 
 @csrf_exempt
 def create(request, id):
@@ -34,7 +35,8 @@ def create(request, id):
                     gender=user_data['gender'],
                     pronoun=user_data['pronoun'],
                     description=user_data['description'],
-                    credential_id=credential_id
+                    credential_id=credential_id,
+                    key=get_random_string(length=20)
                 )
                 
                 # Crie os links
