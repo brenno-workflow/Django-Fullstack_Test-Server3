@@ -102,7 +102,7 @@ def login(request):
                     expiry_timestamp = int(time.time()) + token_lifetime_seconds
 
                     # Gerar resposta json payload
-                    payload = {'token':token, 'expiry_timestamp': expiry_timestamp, 'user_id': user.id}
+                    payload = {'token':token, 'expiry_timestamp': expiry_timestamp, 'user_id': user.id, 'user_email': email, 'user_name': user.name}
 
                     # Retornar uma mensagem de sucesso
                     #return JsonResponse({'message': 'Login realizado com sucesso', 'token': token, 'id': user.id})
