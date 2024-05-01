@@ -31,21 +31,30 @@ def signup(request):
         # Se ambos os campos estiverem presentes, continue com o processamento
         if email and password:
 
-            # Criar um formulário com os dados recebidos
-            form = CredentialForm(data)
+            # Verificar se já existe uma credencial com o mesmo e-mail no banco de dados
+            existing_credential = Credential.objects.filter(email=email).first()
 
-            if form.is_valid():
+            if not existing_credential:
 
-                # Salvar os dados no banco de dados
-                form.save()
-            
-                # Sua lógica de criação de usuário aqui
-                return JsonResponse({'message': 'Cadastro realizado com sucesso'})
-            
+                # Criar um formulário com os dados recebidos
+                form = CredentialForm(data)
+
+                if form.is_valid():
+
+                    # Salvar os dados no banco de dados
+                    form.save()
+                
+                    # Sua lógica de criação de usuário aqui
+                    return JsonResponse({'message': 'Cadastro realizado com sucesso'})
+                
+                else:
+
+                    # Retornar uma resposta JSON com erros de validação
+                    return JsonResponse({'errors': form.errors}, status=400)
+                
             else:
-
-                # Retornar uma resposta JSON com erros de validação
-                return JsonResponse({'errors': form.errors}, status=400)
+                # Se já existir uma credencial com este e-mail, retorne uma mensagem de erro
+                return JsonResponse({'error': 'Já existe uma conta cadastrada com este e-mail'}, status=400)
         
         else:
 

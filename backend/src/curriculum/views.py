@@ -17,57 +17,66 @@ def create(request, id):
             credential_id = id
             print(f'credential_id: {credential_id}')
 
-            # Inserir dados do usuário
-            user_data = data['user']
-            user = User.objects.create(
-                name=user_data['name'],
-                title=user_data['title'],
-                email=user_data['email'],
-                phone=user_data['phone'],
-                location=user_data['location'],
-                avatar=user_data['avatar'],
-                gender=user_data['gender'],
-                pronoun=user_data['pronoun'],
-                description=user_data['description'],
-                credential_id=credential_id
-            )
+            # Verificar se já existe um usuário com o credential_id fornecido na URL
+            user_exists = User.objects.filter(credential_id=credential_id).exists()
+
+            if not user_exists:                
+
+                # Inserir dados do usuário
+                user_data = data['user']
+                user = User.objects.create(
+                    name=user_data['name'],
+                    title=user_data['title'],
+                    email=user_data['email'],
+                    phone=user_data['phone'],
+                    location=user_data['location'],
+                    avatar=user_data['avatar'],
+                    gender=user_data['gender'],
+                    pronoun=user_data['pronoun'],
+                    description=user_data['description'],
+                    credential_id=credential_id
+                )
+                
+                # Crie os links
+                for link_data in data['links']:
+                    Link.objects.create(user=user, **link_data)
+
+                # Crie as experiências
+                for exp_data in data['experience']:
+                    Experience.objects.create(user=user, **exp_data)
+
+                # Crie as educações
+                for edu_data in data['education']:
+                    Education.objects.create(user=user, **edu_data)
+
+                # Crie as habilidades
+                for skill_name in data['skills']:
+                    Skill.objects.create(user=user, name=skill_name)
+
+                # Crie os tópicos personalizados
+                for custom_data in data['Custom']:
+                    if custom_data['topicType']['type'] == 'graphic':
+                        Graphic.objects.create(
+                            user=user,
+                            title=custom_data['title'],
+                            description=custom_data['description'],
+                            percentage=custom_data['topicType']['percentage'],
+                            color=custom_data['topicType']['color']
+                        )
+                    elif custom_data['topicType']['type'] == 'topics':
+                        Topic.objects.create(
+                            user=user,
+                            title=custom_data['title'],
+                            description=custom_data['description'],
+                            topics=custom_data['topicType']['topics']
+                        )
+
+                # Retorne uma resposta de sucesso
+                return JsonResponse({'message': 'Criado com sucesso'})
             
-            # Crie os links
-            for link_data in data['links']:
-                Link.objects.create(user=user, **link_data)
-
-            # Crie as experiências
-            for exp_data in data['experience']:
-                Experience.objects.create(user=user, **exp_data)
-
-            # Crie as educações
-            for edu_data in data['education']:
-                Education.objects.create(user=user, **edu_data)
-
-            # Crie as habilidades
-            for skill_name in data['skills']:
-                Skill.objects.create(user=user, name=skill_name)
-
-            # Crie os tópicos personalizados
-            for custom_data in data['Custom']:
-                if custom_data['topicType']['type'] == 'graphic':
-                    Graphic.objects.create(
-                        user=user,
-                        title=custom_data['title'],
-                        description=custom_data['description'],
-                        percentage=custom_data['topicType']['percentage'],
-                        color=custom_data['topicType']['color']
-                    )
-                elif custom_data['topicType']['type'] == 'topics':
-                    Topic.objects.create(
-                        user=user,
-                        title=custom_data['title'],
-                        description=custom_data['description'],
-                        topics=custom_data['topicType']['topics']
-                    )
-
-            # Retorne uma resposta de sucesso
-            return JsonResponse({'message': 'Criado com sucesso'})
+            else:
+                # Se o usuário já existir, retorne uma mensagem informando que já existe um currículo
+                return JsonResponse({'message': 'Já existe um currículo para este usuário'}, status=400)
 
         except Exception as e:
             # Em caso de qualquer exceção, retorne uma resposta de erro
