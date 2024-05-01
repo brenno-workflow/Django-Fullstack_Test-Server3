@@ -7,14 +7,14 @@ from django.core import serializers
 from django.shortcuts import get_object_or_404
 
 @csrf_exempt
-def create(request):
+def create(request, id):
     if request.method == 'POST':
         try:
                         
             data = json.loads(request.body.decode('utf-8'))
             print(data)
 
-            credential_id = data.get('id')
+            credential_id = id
             print(f'credential_id: {credential_id}')
 
             # Inserir dados do usuário
@@ -77,13 +77,13 @@ def create(request):
     return JsonResponse({'error': 'Método não permitido'}, status=405)
 
 @csrf_exempt
-def update(request):
+def update(request, id):
     if request.method == 'PUT':
         try:
             data = json.loads(request.body.decode('utf-8'))
             print(f'data: {data}')
 
-            credential_id = data.get('id')
+            credential_id = id
             print(f'credential_id: {credential_id}')
 
             user_data = data['user']
@@ -237,11 +237,10 @@ def update(request):
     return JsonResponse({'error': 'Método não permitido'}, status=405)
 
 @csrf_exempt
-def delete(request):
+def delete(request, id):
     if request.method == 'DELETE':
         try:
-            data = json.loads(request.body.decode('utf-8'))
-            credential_id = data.get('id')
+            credential_id = id
 
             # Obtenha o usuário existente
             user = User.objects.get(credential_id=credential_id)
@@ -313,11 +312,11 @@ def list(request, id):
     return JsonResponse({'error': 'Lista não disponivel'}, status=405)
 
 @csrf_exempt
-def accessLevel(request):
+def accessLevel(request, id):
     if request.method == 'PUT':
         try:
             data = json.loads(request.body.decode('utf-8'))
-            credential_id = data.get('id')
+            credential_id = id
             access_level = data.get('accessLevel')
 
             # Obtenha o usuário existente
@@ -336,11 +335,11 @@ def accessLevel(request):
         return JsonResponse({'error': 'Method not allowed'}, status=405)
 
 @csrf_exempt
-def published(request):
+def published(request, id):
     if request.method == 'PUT':
         try:
             data = json.loads(request.body.decode('utf-8'))
-            credential_id = data.get('id')
+            credential_id = id
             published = data.get('published')
 
             # Obtenha o usuário existente
