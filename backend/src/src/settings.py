@@ -38,6 +38,8 @@ DEBUG = os.getenv("DEBUG", "False").lower() == "true"
 ALLOWED_HOSTS = [
     'localhost',
     'django-test-server3.onrender.com',
+    'localhost:3000',
+    'curriculum42-univesp-pi.vercel.app',
 ]
 
 # Application definition
@@ -172,7 +174,7 @@ CORS_ORIGIN_WHITELIST = [
     'http://localhost:3000',  # Seu frontend em localhost
     'https://django-test-server3.onrender.com',  # Seu frontend em Render
     'http://localhost',
-    'https://curriculum42-univesp-pi.vercel.app/',
+    'https://curriculum42-univesp-pi.vercel.app',
 ]
 
-CORS_ORIGIN_ALLOW_ALL = False
+CORS_ORIGIN_ALLOW_ALL = True
