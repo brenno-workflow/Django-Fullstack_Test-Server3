@@ -171,6 +171,8 @@ REST_FRAMEWORK = {
 CORS_ORIGIN_WHITELIST = [
     'http://localhost:3000',  # Seu frontend em localhost
     'https://django-test-server3.onrender.com',  # Seu frontend em Render
+    'http://localhost',
+    'https://curriculum42-univesp-pi.vercel.app/',
 ]
 
-CORS_ORIGIN_ALLOW_ALL = False
+CORS_ORIGIN_ALLOW_ALL = True
